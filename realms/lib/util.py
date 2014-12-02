@@ -92,8 +92,8 @@ def to_canonical(s):
     s = str(s)
     s = re.sub(r"\s\s*", "-", s)
     s = re.sub(r"\-\-+", "-", s)
-    s = re.sub(r"[^a-zA-Z0-9\-]", "", s)
-    s = s[:64]
+    s = re.sub(r"[^a-zA-Z0-9\-\_]", "", s)
+    s = s[:128]
     s = s.lower()
     return s
 
@@ -105,6 +105,9 @@ def cname_to_filename(cname):
     :return: str -- Filename
 
     """
+
+    cname = cname.replace("_", "/")
+
     return cname + ".md"
 
 
@@ -116,7 +119,15 @@ def filename_to_cname(filename):
     It's assumed filename is already canonical format
 
     """
+    filename = filename.replace("/", "_")
     return os.path.splitext(filename)[0]
+
+
+def split_filename(filename):
+    path, filename = os.path.split(filename)
+    ext = os.path.splitext(filename)[1]
+
+    return (path, filename, ext)
 
 
 def gravatar_url(email):

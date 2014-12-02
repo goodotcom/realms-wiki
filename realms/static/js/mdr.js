@@ -83,6 +83,7 @@ var MDR = {
         return id;
       });
     }
+    
     this.hook();
     return html;
   },
