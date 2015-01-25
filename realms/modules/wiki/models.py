@@ -83,6 +83,10 @@ class Wiki(HookMixin):
         cname = to_canonical(name)
         filename = cname_to_filename(cname)
 
+        dirname = os.path.dirname(self.path + "/" + filename)
+        if dirname and not os.path.exists(dirname):
+          os.makedirs(dirname)
+
         with open(self.path + "/" + filename, 'w') as f:
             f.write(content)
 

@@ -60,9 +60,20 @@ var MDR = {
       sanitize = this.sanitize;
     }
     this.md = md;
+
+    var r = /\[\[([^|\[\]]+)\|([^\[\]]+)\]\]/g
+    this.md = this.md.replace(r, "<a href=\"$2\">$1</a>")
+
+    // TODO: support page name wiki links, this does not work!
+    var r = /\[\[([^|\[\]]+)\]\]/g
+    this.md = this.md.replace(r, "<a href=\"$1\">$1</a>")
+
     this.processMeta();
     try {
       var html = this.parse(this.md);
+
+      // console.log(html)
+
     } catch(e) {
       return this.md;
     }

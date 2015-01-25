@@ -6,7 +6,8 @@ from .models import PageNotFound
 blueprint = Blueprint('wiki', __name__)
 
 
-@blueprint.route("/_commit/<sha>/<name>")
+@blueprint.route("/_commit/<sha>/<path:name>")
+@login_required
 def commit(name, sha):
     cname = to_canonical(name)
 
@@ -18,7 +19,8 @@ def commit(name, sha):
     return render_template('wiki/page.html', name=name, page=data, commit=sha)
 
 
-@blueprint.route("/_compare/<name>/<regex('[^.]+'):fsha><regex('\.{2,3}'):dots><regex('.+'):lsha>")
+@blueprint.route("/_compare/<regex('[0-9a-z]+'):fsha><regex('\.{2,3}'):dots><regex('[a-z0-9]+'):lsha>/<path:name>")
+@login_required
 def compare(name, fsha, dots, lsha):
     diff = g.current_wiki.compare(name, fsha, lsha)
     return render_template('wiki/compare.html',
@@ -53,12 +55,13 @@ def revert():
     return dict(sha=sha)
 
 
-@blueprint.route("/_history/<name>")
+@blueprint.route("/_history/<path:name>")
+@login_required
 def history(name):
     return render_template('wiki/history.html', name=name, history=g.current_wiki.get_history(name))
 
 
-@blueprint.route("/_edit/<name>")
+@blueprint.route("/_edit/<path:name>")
 @login_required
 def edit(name):
     cname = to_canonical(name)
@@ -68,7 +71,8 @@ def edit(name):
         # Page doesn't exist
         return redirect(url_for('wiki.create', name=cname))
 
-    name = remove_ext(page['name'])
+    name = remove_ext(page['path'])
+
     g.assets['js'].append('editor.js')
     return render_template('wiki/edit.html',
                            name=name,
@@ -79,7 +83,7 @@ def edit(name):
 
 
 @blueprint.route("/_create/", defaults={'name': None})
-@blueprint.route("/_create/<name>")
+@blueprint.route("/_create/<path:name>")
 @login_required
 def create(name):
     cname = to_canonical(name) if name else ""
@@ -95,11 +99,12 @@ def create(name):
 
 
 @blueprint.route("/_index")
+@login_required
 def index():
     return render_template('wiki/index.html', index=g.current_wiki.get_index())
 
 
-@blueprint.route("/<name>", methods=['POST', 'PUT', 'DELETE'])
+@blueprint.route("/<path:name>", methods=['POST', 'PUT', 'DELETE'])
 @login_required
 def page_write(name):
     cname = to_canonical(name)
@@ -151,8 +156,9 @@ def page_write(name):
     return dict(sha=sha)
 
 
-@blueprint.route("/", defaults={'name': 'home'})
-@blueprint.route("/<name>")
+@blueprint.route("/", defaults={'name': 'Home'})
+@blueprint.route("/<path:name>")
+@login_required
 def page(name):
     cname = to_canonical(name)
     if cname != name:
