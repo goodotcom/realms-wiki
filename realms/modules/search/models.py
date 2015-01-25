@@ -113,7 +113,11 @@ class WhooshSearch(BaseSearch):
             res = []
             for hit in results:
                 name = hit["path"]
-                page_data = g.current_wiki.get_page(name)["data"].decode("utf-8")
+                page = g.current_wiki.get_page(name)
+                if not page:
+                    print "WARNING: empty page for name='%s'" % name
+                    continue
+                page_data = page["data"].decode("utf-8")
                 content = hit.highlights('body', text=page_data)
 
                 res.append(dict(name=name, content=content))
