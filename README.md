@@ -1,13 +1,14 @@
-# Realms Wiki Beta
+# Realms Wiki (Beta)
 
 Git based wiki written in Python
+
 Inspired by [Gollum][gollum], [Ghost][ghost], and [Dillinger][dillinger].
 Basic authentication and registration included.
 
 Demo: http://realms.io
 This domain is being used temporarily as a demo so expect it to change.
 
-Source: https://github.com/scragg0x/realms-wiki
+Source: https://github.com/goodotcom/realms-wiki
 
 ## Features
 
@@ -31,7 +32,7 @@ Source: https://github.com/scragg0x/realms-wiki
 
 - Nginx (if you want proxy requests, this is recommended).
 - Memcached or Redis, default is memonization.
-- MariaDB, MySQL, Postgresql, or another database supported by SQLAlchemy, default is sqlite.
+- MariaDB, MySQL, PostgreSQL, or another database supported by SQLAlchemy, default is sqlite.
     Anon or single user does not require a database.
 
 ## Installation
@@ -48,9 +49,13 @@ You will need the following packages to get started:
 
     yum install -y python-pip python-devel.x86_64 libxslt-devel.x86_64 libxml2-devel.x86_64 libffi-devel.x86_64 libyaml-devel.x86_64 libxslt-devel.x86_64 zlib-devel.x86_64 openssl-devel.x86_64 python-pbr gcc
     
-#### OSX / Windows
+#### Mac OS X
 
-This app is designed for Linux and I recommend using Vagrant to install on OSX or Windows.
+1. Python 2.7. The easiest way is to install it using [Anaconda](http://continuum.io/downloads).
+
+#### Windows
+
+This app is designed for Linux and I recommend using Vagrant to install on Windows.
 
 ### Realms Wiki installation via PyPI
 
@@ -60,25 +65,38 @@ The easiest way. Install it using Python Package Index:
 
 ### Realms Wiki installation via Git
 
-#### Ubuntu
+NodeJS is required for installing [bower](http://bower.io) and it's used for pulling front-end dependencies.
 
-    git clone https://github.com/scragg0x/realms-wiki
+#### Ubuntu (Debian)
+
+    git clone https://github.com/goodotcom/realms-wiki
     cd realms-wiki
 
     sudo apt-get install -y software-properties-common python-software-properties
     sudo add-apt-repository -y ppa:chris-lea/node.js
     sudo apt-get update
-    sudo apt-get install -y nodejs python-pip python-dev libxml2-dev libxslt1-dev zlib1g-dev libffi-dev libyaml-dev libssl-dev
+    sudo apt-get install -y nodejs nodejs-legacy npm virtualenv
     sudo npm install -g bower
     bower install
 
     virtualenv .venv
     source .venv/bin/activate
-
     pip install -r requirements.txt
-    realms-wiki start
     
-NodeJS is required for installing [bower](http://bower.io) and it's used for pulling front end dependencies.
+#### Mac OS X
+
+1. Install [NodeJS](https://nodejs.org).
+
+2. Clone repository and install Python dependencies:
+        
+        sudo npm install -g bower
+        git clone https://github.com/goodotcom/realms-wiki
+        cd realms-wiki
+        bower install
+
+        virtualenv .venv
+        source .venv/bin/activate
+        pip install -r requirements.txt
 
 ### Realms Wiki via Vagrant
 
@@ -90,7 +108,7 @@ To get started with Vagrant, download and install Vagrant and VirtualBox for you
 
 Then execute the following in the terminal:
 
-    git clone https://github.com/scragg0x/realms-wiki
+    git clone https://github.com/goodotcom/realms-wiki
     cd realms-wiki
     vagrant up
 
@@ -213,7 +231,7 @@ Reload apache:
     sudo apt-get install -y mariadb-server mariadb-client libmariadbclient-dev
     realms-wiki pip install MySQL-Python
 
-### Postgres Setup
+### PostgreSQL Setup
 
     sudo apt-get install -y libpq-dev postgresql postgresql-contrib postgresql-client
     realms-wiki pip install psycopg2
@@ -343,10 +361,10 @@ Please follow the code style guide.
 
 [Python style guide](http://google-styleguide.googlecode.com/svn/trunk/pyguide.html)
 
-## Author
+## Author and references
 
 Matthew Scragg <scragg@gmail.com>
 
 [gollum]: https://github.com/gollum/gollum
 [ghost]: https://github.com/tryghost/Ghost
-[dillinger]: https://github.com/joemccann/dillinger/
+[dillinger]: https://github.com/joemccann/dillinger
