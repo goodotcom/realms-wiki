@@ -24,8 +24,13 @@ def rebuild_index():
         search.delete_index('wiki')
         wiki = Wiki(app.config['WIKI_PATH'])
         for entry in wiki.get_index():
+            assert 'name' in entry
             page = wiki.get_page(entry['name'])
-            name = filename_to_cname(page['name'])
+            if not page:
+                print "WARNING: skipping '%s'" % entry['name']
+                continue
+            name = filename_to_cname(page['path'])
+            print "indexing page '%s'" % (name)
             # TODO add email?
             body = dict(name=name,
                         content=page['data'],

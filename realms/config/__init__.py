@@ -39,7 +39,7 @@ def save(conf):
 def get_path(check_write=False):
     """Find config path
     """
-    for loc in os.curdir, os.path.expanduser("~"), "/etc/realms-wiki":
+    for loc in [os.path.dirname(os.path.abspath(__file__)) + "/../../.."]:
         if not loc:
             continue
         path = os.path.join(loc, "realms-wiki.json")

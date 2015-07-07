@@ -92,9 +92,8 @@ def to_canonical(s):
     s = str(s)
     s = re.sub(r"\s\s*", "-", s)
     s = re.sub(r"\-\-+", "-", s)
-    s = re.sub(r"[^a-zA-Z0-9\-\_]", "", s)
-    s = s[:128]
-    s = s.lower()
+    s = re.sub(r"[^a-zA-Z0-9\/\-]", "", s)
+    s = s[:64]
     return s
 
 
