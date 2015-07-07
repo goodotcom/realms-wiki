@@ -82,6 +82,10 @@ class Wiki(HookMixin):
 
         cname = to_canonical(name)
         filename = cname_to_filename(cname)
+        namespace_path = os.path.join(self.path, os.path.split(filename)[0])
+
+        if not os.path.exists(namespace_path):
+            os.makedirs(namespace_path)
 
         with open(self.path + "/" + filename, 'w') as f:
             f.write(content)
@@ -180,6 +184,13 @@ class Wiki(HookMixin):
         filename = cname_to_filename(name).encode('latin-1')
         sha = sha.encode('latin-1')
 
+        namespace_path = os.path.join(self.path, os.path.splitext(filename)[0])
+        namespace_cname = to_canonical(os.path.splitext(filename)[0])
+        if not os.path.exists(os.path.join(self.path, filename)) and os.path.isdir(namespace_path):
+            files = ["[%s](%s_%s)" % (x, namespace_cname, filename_to_cname(x)) for x in os.listdir(namespace_path)]
+            print(files)
+            return {'data': "# Namespace %s \n\n This is an automatically generated list of pages in this namespace.\n\n %s" % (os.path.splitext(filename)[0], '\n'.join(files))}
+
         try:
             data = self.gittle.get_commit_files(sha, paths=[filename]).get(filename)
             if not data:
@@ -192,6 +203,7 @@ class Wiki(HookMixin):
                         partials[partial_name] = self.get_page(partial_name)
             data['partials'] = partials
             data['info'] = self.get_history(name, limit=1)[0]
+
             return data
 
         except KeyError:
