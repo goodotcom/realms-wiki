@@ -12,6 +12,7 @@ $(document).ready(function() {
   <table class="table table-bordered data-table">
     <thead>
     <tr>
+      <th>Type</th>
       <th>Name</th>
       <th class="hidden-xs">Bytes</th>
       <th>Modified</th>
@@ -20,10 +21,35 @@ $(document).ready(function() {
     </thead>
     {% for file in index %}
       <tr>
+        <td>
+          {% if file['dir'] %}
+              DIR
+          {% else %}
+              _
+          {% endif %}
+        </td>
         <td><a href="{{ url_for('wiki.page', name=file['name']) }}">{{ file['name'] }}</a></td>
-        <td class="hidden-xs">{{ file['size'] }}</td>
-        <td>{{ file['ctime']|datetime }}</td>
-        <td class="hidden-xs hidden-sm">{{ file['mtime']|datetime }}</td>
+        <td class="hidden-xs">
+          {% if file['dir'] %}
+              _
+          {% else %}
+              {{ file['size'] }}
+          {% endif %}
+        </td>
+        <td>
+          {% if file['dir'] %}
+              _
+          {% else %}
+              {{ file['ctime']|datetime }}
+          {% endif %}
+        </td>
+        <td class="hidden-xs hidden-sm">
+          {% if file['dir'] %}
+              _
+          {% else %}
+              {{ file['mtime']|datetime }}
+          {% endif %}
+        </td>
       </tr>
     {% endfor %}
   </table>

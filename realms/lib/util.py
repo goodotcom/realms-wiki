@@ -121,6 +121,8 @@ def filename_to_cname(filename):
     filename = filename.replace("/", "_")
     return os.path.splitext(filename)[0]
 
+def filename_to_pathname(filename):
+    return os.path.splitext(filename.split('/')[0])[0]
 
 def split_filename(filename):
     path, filename = os.path.split(filename)

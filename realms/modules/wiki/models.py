@@ -5,7 +5,7 @@ import gittle.utils
 import yaml
 from gittle import Gittle
 from dulwich.repo import NotGitRepository
-from realms.lib.util import to_canonical, cname_to_filename, filename_to_cname
+from realms.lib.util import to_canonical, cname_to_filename, filename_to_cname, filename_to_pathname
 from realms import cache
 from realms.lib.hook import HookMixin
 
@@ -257,13 +257,20 @@ class Wiki(HookMixin):
         """
         rv = []
         index = self.repo.open_index()
+        # Check if is a file or a directory, not insert duplicate.
         for name in index:
-            rv.append(dict(name=filename_to_cname(name),
-                           filename=name,
-                           ctime=index[name].ctime[0],
-                           mtime=index[name].mtime[0],
-                           sha=index[name].sha,
-                           size=index[name].size))
+            check = False
+            for singlerv in rv:
+                if singlerv['name'] == filename_to_pathname(name):
+                    check = True
+            if not check:
+                rv.append(dict(name=filename_to_pathname(name),
+                               filename=name,
+                               ctime=index[name].ctime[0],
+                               mtime=index[name].mtime[0],
+                               sha=index[name].sha,
+                               size=index[name].size,
+                               dir=len(name.split("/"))>1))
 
         return rv
 
