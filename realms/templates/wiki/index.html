@@ -19,6 +19,17 @@ $(document).ready(function() {
       <th class="hidden-xs hidden-sm">Created</th>
     </tr>
     </thead>
+    {% if currentpath != None %}
+      <tr>
+        <td>DIR</td>
+        <td>
+          <a href="{{ url_for('wiki.page', name='_index/' + currentpath) }}">..</a>
+        </td>
+        <td class="hidden-xs">_</td>
+        <td>_</td>
+        <td class="hidden-xs hidden-sm">_</td>
+      </tr>
+    {% endif %}
     {% for file in index %}
       <tr>
         <td>
@@ -29,7 +40,13 @@ $(document).ready(function() {
               _
           {% endif %}
         </td>
-        <td><a href="{{ url_for('wiki.page', name=file['name']) }}">{{ file['name'] }}</a></td>
+        <td>
+          {% if file['dir'] %}
+            <a href="{{ url_for('wiki.page', name='_index/' + file['path']) }}">{{ file['name'] }}</a>
+          {% else %}
+            <a href="{{ url_for('wiki.page', name=file['name']) }}">{{ file['name'] }}</a>
+          {% endif %}
+        </td>
         <td class="hidden-xs">
           {% if file['dir'] %}
               _
