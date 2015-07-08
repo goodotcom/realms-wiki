@@ -249,28 +249,34 @@ class Wiki(HookMixin):
         new = self.get_page(name, sha=new_sha)
         return ghdiff.diff(old['data'], new['data'])
 
-    def get_index(self):
+    def get_index(self, path):
         """Get repo index of head.
 
         :return: list -- List of dicts
 
         """
         rv = []
+
         index = self.repo.open_index()
+
         # Check if is a file or a directory, not insert duplicate.
         for name in index:
-            check = False
-            for singlerv in rv:
-                if singlerv['name'] == filename_to_pathname(name):
-                    check = True
-            if not check:
-                rv.append(dict(name=filename_to_pathname(name),
-                               filename=name,
-                               ctime=index[name].ctime[0],
-                               mtime=index[name].mtime[0],
-                               sha=index[name].sha,
-                               size=index[name].size,
-                               dir=len(name.split("/"))>1))
+            if (path and name.startswith(path)) or not path:
+                check = False
+                for singlerv in rv:
+                    if singlerv['name'] == filename_to_pathname(name, path):
+                        check = True
+                if not check:
+                    isdir = False
+                    if name.startswith(path):
+                        isdir = len(name[len(path + '/'):].split("/")) > 1
+                    rv.append(dict(name=filename_to_pathname(name, path),
+                                   filename=name,
+                                   ctime=index[name].ctime[0],
+                                   mtime=index[name].mtime[0],
+                                   sha=index[name].sha,
+                                   size=index[name].size,
+                                   dir=isdir))
 
         return rv
 

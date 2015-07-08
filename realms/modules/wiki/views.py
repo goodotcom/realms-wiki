@@ -98,10 +98,11 @@ def create(name):
                            info={})
 
 
-@blueprint.route("/_index")
+@blueprint.route("/_index", defaults={'name': ''})
+@blueprint.route("/_index/<path:name>")
 @login_required
-def index():
-    return render_template('wiki/index.html', index=g.current_wiki.get_index())
+def index(name):
+    return render_template('wiki/index.html', index=g.current_wiki.get_index(name))
 
 
 @blueprint.route("/<path:name>", methods=['POST', 'PUT', 'DELETE'])
