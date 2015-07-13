@@ -71,7 +71,7 @@ def module_exists(module_name):
               help='Wiki Directory (git repo)')
 @click.option('--allow-anon',
               default=config.ALLOW_ANON,
-              is_flag=True,
+              is_flag=False,
               prompt='Allow anonymous edits?')
 @click.option('--registration-enabled',
               default=config.REGISTRATION_ENABLED,

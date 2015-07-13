@@ -120,7 +120,7 @@ WIKI_PATH = '/tmp/wiki'
 # Name of page that will act as home
 WIKI_HOME = 'home'
 
-ALLOW_ANON = True
+ALLOW_ANON = False
 REGISTRATION_ENABLED = True
 
 # None, firepad, and/or togetherjs
