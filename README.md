@@ -1,14 +1,17 @@
 # Realms Wiki (Beta)
 
-Git based wiki written in Python
+Git based wiki written in Python.
 
 Inspired by [Gollum][gollum], [Ghost][ghost], and [Dillinger][dillinger].
 Basic authentication and registration included.
 
-Demo: http://realms.io
+Demo (original Realms Wiki): http://realms.io
 This domain is being used temporarily as a demo so expect it to change.
 
-Source: https://github.com/goodotcom/realms-wiki
+## Working in progress
+
+* Namespace support (sub directory).
+* Small improvements and fixing TODOs.
 
 ## Features
 
@@ -336,7 +339,7 @@ This will start the server in the foreground with auto reloaded enabled:
 
 Access from your browser:
 
-http://localhost:5000
+[http://localhost:5000](http://localhost:5000)
 
 ## Templating
 
@@ -360,10 +363,6 @@ Issues and pull requests are welcome.
 Please follow the code style guide.
 
 [Python style guide](http://google-styleguide.googlecode.com/svn/trunk/pyguide.html)
-
-## Author and references
-
-Matthew Scragg <scragg@gmail.com>
 
 [gollum]: https://github.com/gollum/gollum
 [ghost]: https://github.com/tryghost/Ghost
