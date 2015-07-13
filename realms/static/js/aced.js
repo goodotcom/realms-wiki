@@ -60,12 +60,12 @@ function Aced(settings) {
     vibrant_ink: "Vibrant Ink"
   };
 
-  function editorId() {
-    return "aced." + id;
+  function editorId(sha) {
+    return "aced." + id + "." + sha;
   }
 
-  function infoKey() {
-    return editorId() + ".info";
+  function infoKey(sha) {
+    return editorId(sha) + ".info";
   }
 
   function gc() {
@@ -142,10 +142,10 @@ function Aced(settings) {
   }
 
   function info(info) {
-    if (info) {
-      store.set(infoKey(), info);
+    if (store.get(infoKey(info['sha']))) {
+      store.set(infoKey(info['sha']), info);
     }
-    return store.get(infoKey());
+    return store.get(infoKey(info['sha']));
   }
 
   function val(val) {
@@ -156,20 +156,20 @@ function Aced(settings) {
     return editor.getSession().getValue();
   }
 
-  function discardDraft() {
+  function discardDraft(sha) {
     stopAutoSave();
-    store.remove(editorId());
-    store.remove(infoKey());
+    store.remove(editorId(sha));
+    store.remove(infoKey(sha));
     location.reload();
   }
 
-  function save() {
-    store.set(editorId(), val());
+  function save(sha) {
+    store.set(editorId(sha), val());
   }
 
-  function submit() {
-    store.remove(editorId());
-    store.remove(editorId() + ".info");
+  function submit(sha) {
+    store.remove(editorId(sha));
+    store.remove(editorId(sha) + ".info");
     options.submit(val());
   }
 
@@ -341,12 +341,12 @@ function Aced(settings) {
     }
   }
 
-  function initEditor() {
+  function initEditor(sha) {
     editor = ace.edit(id);
     setTheme(profile.theme || options.theme);
     editor.getSession().setMode('ace/mode/' + options.mode);
-    if (store.get(editorId()) && store.get(editorId()) != val()) {
-      editor.getSession().setValue(store.get(editorId()));
+    if (store.get(editorId(sha)) && store.get(editorId(sha)) != val()) {
+      editor.getSession().setValue(store.get(editorId(sha)));
     }
     editor.getSession().setUseWrapMode(true);
     editor.getSession().setTabSize(2);
@@ -392,16 +392,20 @@ function Aced(settings) {
     }
 
     if (options.info) {
+      console.log(options.info);
       // If no info exists, save it to storage
-      if (!store.get(infoKey())) {
-        store.set(infoKey(), options.info);
+      console.log(store.get(infoKey(options.info['sha'])));
+      if (!store.get(infoKey(options.info['sha']))) {
+        store.set(infoKey(options.info['sha']), options.info);
       } else {
         // Check info in storage against one passed in
         // for possible changes in data that may have occurred
-        var info = store.get(infoKey());
-        if (info['sha'] != options.info['sha'] && !info['ignore']) {
+        var info = store.get(infoKey(options.info['sha']));
+        if (info) {
           // Data has changed since start of draft
-          $(document).trigger('shaMismatch');
+          console.log(info['sha']);
+          console.log(options.info['sha']);
+          $(document).trigger('shaMatch', options.info['sha']);
         }
       }
     }

@@ -16,7 +16,8 @@ $entry_preview_header.click(function(){
   $entry_markdown.removeClass('active');
 });
 
-$(document).on('shaMismatch', function() {
+$(document).on('shaMatch', function(e, sha) {
+  console.log(sha);
   bootbox.dialog({
     title: "Page has changed",
     message: "This page has changed and differs from your draft.  What do you want to do?",
@@ -25,7 +26,7 @@ $(document).on('shaMismatch', function() {
         label: "Ignore",
         className: "btn-default",
         callback: function() {
-          var info = aced.info();
+          var info = aced.info({'sha': sha});
           info['ignore'] = true;
           aced.info(info);
         }
@@ -34,7 +35,7 @@ $(document).on('shaMismatch', function() {
         label: "Discard Draft",
         className: "btn-danger",
         callback: function() {
-          aced.discard();
+          aced.discard(sha);
         }
       },
       changes: {
