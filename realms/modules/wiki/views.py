@@ -134,6 +134,7 @@ def page_write(name):
                                         email=current_user.email)
 
     elif request.method == 'PUT':
+        # Edit
         edit_cname = to_canonical(request.form['name'])
 
         if edit_cname in current_app.config.get('WIKI_LOCKED_PAGES'):
@@ -150,8 +151,8 @@ def page_write(name):
 
         return dict(sha=sha)
 
-    else:
-        # DELETE
+    elif request.method == 'DELETE':
+        # Delete
         if cname in current_app.config.get('WIKI_LOCKED_PAGES'):
             return dict(error=True, message="Page is locked"), 403
 

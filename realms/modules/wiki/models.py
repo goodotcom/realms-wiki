@@ -163,13 +163,16 @@ class Wiki(HookMixin):
         if not message:
             message = "Deleted %s" % name
 
-        filename = cname_to_filename(name)
-        self.gittle.rm(filename)
+        cname = to_canonical(name)
+        filename = cname_to_filename(cname)
+        self.gittle.rm([filename])
         commit = self.gittle.commit(name=username,
                                     email=email,
                                     message=message,
-                                    files=[str(filename)])
-        cache.delete_many(name)
+                                    files=[filename])
+
+        cache.delete(cname)
+
         return commit
 
     def get_page(self, name, sha='HEAD'):

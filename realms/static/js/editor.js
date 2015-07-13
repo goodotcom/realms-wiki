@@ -19,7 +19,7 @@ $entry_preview_header.click(function(){
 $(document).on('shaMismatch', function() {
   bootbox.dialog({
     title: "Page has changed",
-    message: "This page has changed and differs from your draft.  What do you want to do?",
+    message: "This page has changed and differs from your draft. What do you want to do?",
     buttons: {
       ignore: {
         label: "Ignore",
@@ -41,6 +41,7 @@ $(document).on('shaMismatch', function() {
         label: "Show Diff",
         className: "btn-primary",
         callback: function() {
+          // TODO: diff on same file.
           bootbox.alert("Draft diff not done! Sorry");
         }
       }
@@ -58,9 +59,46 @@ $(function(){
   });
 
   $("#delete-page-btn").click(function() {
-    bootbox.alert("Not Done Yet! Sorry");
+    _deletePage();
   });
 });
+
+var _deletePage = function() {
+  // If the page is not commited (new page)
+  if(!Commit.info['sha']){
+    console.log("page not commited yet");
+    location.href = Config['RELATIVE_PATH'] + '/';
+  }
+  else {
+    console.log("else block");
+
+    var data = {
+      name: $page_name.attr("value"),
+      message: "Deleted " + $page_name.attr("value")
+    };
+
+    var path = Config['RELATIVE_PATH'] + '/' + data['name'];
+    var type = "DELETE";
+
+    $.ajax({
+      type: type,
+      url: path,
+      data: data,
+      dataType: 'json'
+    })
+    .always(function(data, status, error) {
+      var res = data['responseJSON'];
+      if (res && res['error']) {
+        console.log("error!");
+        $page_name.addClass('parsley-error');
+        bootbox.alert("<h3>" + res['message'] + "</h3>");
+      } else {
+        console.log("redirecting...");
+        location.href = Config['RELATIVE_PATH'] + '/';
+      }
+    });
+  }
+}
 
 var aced = new Aced({
   editor: $('#entry-markdown-content').find('.editor').attr('id'),
@@ -74,6 +112,7 @@ var aced = new Aced({
     };
 
     var path = Config['RELATIVE_PATH'] + '/' + data['name'];
+    // If exist Commit.info.sha => Edit page, otherwise Create page.
     var type = (Commit.info['sha']) ? "PUT" : "POST";
 
     $.ajax({
