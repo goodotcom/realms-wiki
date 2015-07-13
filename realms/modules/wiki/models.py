@@ -266,12 +266,12 @@ class Wiki(HookMixin):
                 for singlerv in rv:
                     if singlerv['name'] == filename_to_pathname(name, path):
                         check = True
-                isdir = False
+                isDir = False
                 if name.startswith(path):
-                    isdir = len(name[len(path + '/'):].split("/")) > 1
+                    isDir = len(name[len(path + '/'):].split("/")) > 1
                 # Insert if path is new or if path exist and is not a dir.
-                #if not check or (check and not isdir):
-                if not (check and isdir):
+                #if not check or (check and not isDir):
+                if not (check and isDir):
                     rv.append(dict(name=filename_to_pathname(name, path),
                                    filename=name,
                                    ctime=index[name].ctime[0],
