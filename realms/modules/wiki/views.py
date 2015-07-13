@@ -155,6 +155,7 @@ def page_write(name):
 @blueprint.route("/<name>")
 def page(name):
     cname = to_canonical(name)
+    print("Name: %s, cname: %s" % (name, cname))
     if cname != name:
         return redirect(url_for('wiki.page', name=cname))
 
