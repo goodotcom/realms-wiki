@@ -279,7 +279,7 @@ class Wiki(HookMixin):
                                    sha=index[name].sha,
                                    size=index[name].size,
                                    path=name[: -(len(name.rpartition('/')[2])+1)],
-                                   dir=isdir))
+                                   dir=isDir))
 
         return rv
 
