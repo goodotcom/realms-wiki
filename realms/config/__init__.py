@@ -44,7 +44,7 @@ def get_path(check_write=False):
             continue
         path = os.path.join(loc, "realms-wiki.json")
         if os.path.isfile(path):
-            # file exists
+            # File exists
             if not check_write:
                 # Don't care if I can write
                 return path
@@ -53,9 +53,9 @@ def get_path(check_write=False):
                 # Has write access, ok!
                 return path
         elif os.path.isdir(loc) and check_write:
-            # dir exists file doesn't
+            # Dir exists file doesn't
             if os.access(loc, os.W_OK):
-                # can write file
+                # Can write file
                 return path
     return None
 
@@ -74,7 +74,7 @@ SQLALCHEMY_ECHO = False
 
 PORT = 5000
 BASE_URL = 'http://localhost'
-SITE_TITLE = "Realms"
+SITE_TITLE = "Realms Wiki"
 
 # https://pythonhosted.org/Flask-SQLAlchemy/config.html#connection-uri-format
 DB_URI = 'sqlite:////tmp/wiki.db'
