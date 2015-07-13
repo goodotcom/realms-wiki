@@ -349,7 +349,7 @@ function Aced(settings) {
       editor.getSession().setValue(store.get(editorId()));
     }
     editor.getSession().setUseWrapMode(true);
-    editor.getSession().setTabSize(2);
+    editor.getSession().setTabSize(4);
     editor.getSession().setUseSoftTabs(true);
     editor.setShowPrintMargin(false);
     editor.renderer.setShowInvisibles(true);
