@@ -173,10 +173,10 @@ function Aced(settings) {
     options.submit(val());
   }
 
-  function autoSave() {
+  function autoSave(sha) {
     if (options.autoSave) {
       autoInterval = setInterval(function () {
-        save();
+        save(sha);
       }, options.autoSaveInterval);
     } else {
       stopAutoSave();
@@ -392,9 +392,7 @@ function Aced(settings) {
     }
 
     if (options.info) {
-      console.log(options.info);
       // If no info exists, save it to storage
-      console.log(store.get(infoKey(options.info['sha'])));
       if (!store.get(infoKey(options.info['sha']))) {
         store.set(infoKey(options.info['sha']), options.info);
       } else {
@@ -403,8 +401,6 @@ function Aced(settings) {
         var info = store.get(infoKey(options.info['sha']));
         if (info) {
           // Data has changed since start of draft
-          console.log(info['sha']);
-          console.log(options.info['sha']);
           $(document).trigger('shaMatch', options.info['sha']);
         }
       }
@@ -417,9 +413,9 @@ function Aced(settings) {
     gc();
     initProfile();
     initProps();
-    initEditor();
+    initEditor(options.info['sha']);
     initSyncPreview();
-    autoSave();
+    autoSave(options.info['sha']);
   }
 
   init();

@@ -17,7 +17,6 @@ $entry_preview_header.click(function(){
 });
 
 $(document).on('shaMatch', function(e, sha) {
-  console.log(sha);
   bootbox.dialog({
     title: "Page has changed",
     message: "This page has changed and differs from your draft.  What do you want to do?",
